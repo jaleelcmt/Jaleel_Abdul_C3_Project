@@ -64,14 +64,24 @@ public class Restaurant {
         return name;
     }
 	public int calculateOrderValue(String... itemNames) {
-        int totalOrderValue = 0;
-        for (String itemName : itemNames) {
-            Item item = findItemByName(itemName);
-            if (item != null) {
-                totalOrderValue += item.getPrice();
+         int totalOrderValue = 0;
+		for (String itemName : itemNames) {
+			Item item = findItemByName(itemName);
+			if (item != null) {
+				totalOrderValue += extractPriceFromItemString(item.toString());
+			}
+		}
+		return totalOrderValue;
+    }
+    private int extractPriceFromItemString(String itemString) {
+        String[] parts = itemString.split(":");
+        if (parts.length == 2) {
+            try {
+                return Integer.parseInt(parts[1]);
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing price from item string: " + itemString);
             }
         }
-        return totalOrderValue;
+        return 0; 
     }
-
 }
